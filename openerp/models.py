@@ -1305,7 +1305,12 @@ class BaseModel(object):
             if key in self._context:
                 defaults[name] = self._context[key]
                 continue
-
+            
+            key_ref = 'default_' + name + '_ref'
+            if key_ref in self._context:
+                defaults[name] = self.env.ref(self._context[key_ref])
+                continue
+            
             # 2. look up ir_values
             #    Note: performance is good, because get_defaults_dict is cached!
             ir_values_dict = self.env['ir.values'].get_defaults_dict(self._name)
